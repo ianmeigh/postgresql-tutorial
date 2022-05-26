@@ -1,0 +1,9 @@
+Export to JSON:
+\o test.json -- send all query results to file or |pipe
+SELECT json_agg(t) FROM (<QUERY>) t;
+
+Copy to CSV:
+copy (<QUERY>) TO "example.csv" WITH CSV DELIMITER ',' HEADER; COPY 9
+
+List just the colum names for a given table:
+SELECT * FROM "<TABLE_NAME>" WHERE false
