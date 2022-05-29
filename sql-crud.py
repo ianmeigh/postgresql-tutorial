@@ -5,12 +5,12 @@ from sqlalchemy import (
     String,
     select,
 )
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import generic_repr
 
 # Executing the instructions from the "chinook" database
-db = create_engine("postgresql:///chinook", echo=True)
+db = create_engine("postgresql:///chinook")  # , echo=True)
 """ 
 postgresql: - Database Type
 ///         - Localhost
@@ -43,6 +43,8 @@ session = Session()
 
 # Create the database using declarative_base subclass
 base.metadata.create_all(db)
+
+# ----------------------------------- CREATE ----------------------------------
 
 # Creating records on our Programmer table
 ada_lovelace = Programmer(
@@ -93,19 +95,75 @@ tim_berners_lee = Programmer(
     famous_for="World Wide Web",
 )
 
-# Add each instance of our programmers to our session
-session.add(ada_lovelace)
-session.add(alan_turning)
-session.add(grace_hopper)
-session.add(margaret_hamilton)
-session.add(bill_gates)
-session.add(tim_berners_lee)
+alice_sample = Programmer(
+    first_name="Alice",
+    last_name="Sample",
+    gender="F",
+    nationality="British",
+    famous_for="Sample Entry",
+)
 
+# Add each instance of our programmers to our session
+# session.add(ada_lovelace)
+# session.add(alan_turning)
+# session.add(grace_hopper)
+# session.add(margaret_hamilton)
+# session.add(bill_gates)
+# session.add(tim_berners_lee)
+# session.add(alice_sample)
 
 # commit out session to the database
-session.commit()
+# session.commit()
 
-programmers = session.query(Programmer).all()
+# ------------------------- UPDATING A SINGLE RECORD --------------------------
+
+# programmer = session.query(Programmer).filter_by(id=7).first()
+# programmer.famous_for = "UPDATE: Helping Others"
+
+# commit out session to the database
+# session.commit()
+
+# ------------------------- UPDATING MULTIPLE RECORDS -------------------------
+
+# people = session.query(Programmer)
+# for person in people:
+#     if person.gender == "F":
+#         person.gender = "Female"
+#     elif person.gender == "M":
+#         person.gender = "Male"
+#     else:
+#         print("Gender not defined")
+#     session.commit()
+
+# ------------------------- DELETING A SINGLE RECORD --------------------------
+
+# fname = input("Enter a first name: ").strip(" \t")
+# lname = input("Enter a last name: ").strip(" \t")
+
+# programmer = (
+#     session.query(Programmer)
+#     .filter_by(first_name=fname, last_name=lname)
+#     .first()
+# )
+
+# if programmer is not None:
+#     print(f"Programmer found: {programmer.first_name} {programmer.last_name}")
+#     confirmation = input(
+#         "Are you sure you wish to delete this record? (y/n)\n>> : "
+#     )
+#     if confirmation.lower() == "y":
+#         session.delete(programmer)
+#         session.commit()
+#         print("Programmer has been deleted")
+#     else:
+#         print("Programmer not deleted")
+# else:
+#     print("No records found")
+
+# ------------------------------------ READ -----------------------------------
+
+# QUERY
+programmers = session.query(Programmer)
 for programmer in programmers:
     print(
         programmer.id,
@@ -115,3 +173,7 @@ for programmer in programmers:
         programmer.famous_for,
         sep=" | ",
     )
+
+# EXECUTE
+# programmers = session.execute(select(Programmer))
+# print(programmers.all())
